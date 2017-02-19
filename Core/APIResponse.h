@@ -15,6 +15,6 @@
 
 #pragma mark - Special
 
-- (__kindof JSONModel<Optional> *)Result;
+- (__kindof JSONModel<Optional> *)data;
 
 @end

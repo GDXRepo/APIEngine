@@ -14,7 +14,7 @@
 
 #pragma mark - Special
 
-- (JSONModel<Optional> *)Result {
+- (JSONModel<Optional> *)data {
     return nil;
 }
 

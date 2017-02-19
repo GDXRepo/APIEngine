@@ -22,9 +22,11 @@ NSString *const APIRequestGot401NotAuthorizedNotification = @"APIRequestGot401No
     
 }
 
-@property (assign, nonatomic) Class                   responseClass;
-@property (strong, nonatomic) NSDictionary            *responseHeaders;
-@property (assign, nonatomic) BOOL                    completed;
+@property (strong, nonatomic) NSURL        *url;
+@property (assign, nonatomic) Class        responseClass;
+@property (strong, nonatomic) NSDictionary *responseHeaders;
+@property (assign, nonatomic) BOOL         completed;
+
 @property (strong, nonatomic) NSMutableURLRequest     *request;
 @property (strong, nonatomic) NSURLSessionDataTask    *dataTask;
 @property (assign, nonatomic) float                   progress;
@@ -84,7 +86,7 @@ NSString *const APIRequestGot401NotAuthorizedNotification = @"APIRequestGot401No
         path = [[self.class serviceRootURL] stringByAppendingString:path];
     }
     path = [path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSLog(@"[REQUEST] %s: %@ %@, params: %@", __FUNCTION__, httpMethod, path, parameters);
+    self.url = [NSURL URLWithString:path];
     // init request
     NSError *error = nil;
     NSMutableURLRequest *request = [[self sessionManager].requestSerializer
@@ -92,7 +94,10 @@ NSString *const APIRequestGot401NotAuthorizedNotification = @"APIRequestGot401No
                                     URLString:path
                                     parameters:parameters
                                     error:&error];
-    NSLog(@"[REQUEST] send %@, error = %@", request.URL.absoluteString, error.localizedDescription);
+    NSLog(@"[REQUEST] send %@, error = %@, params: %@",
+          request.URL.absoluteString,
+          error.localizedDescription,
+          parameters);
     // configure headers & perform request
     NSDictionary *customHeaders = [[self class] customRequestHeaders];
     
@@ -175,7 +180,7 @@ NSString *const APIRequestGot401NotAuthorizedNotification = @"APIRequestGot401No
         res = responseObject;
     }
     if (self.callback) {
-        self.callback(self, res, error);
+        self.callback(res, error);
     }
 }
 
@@ -207,10 +212,17 @@ NSString *const APIRequestGot401NotAuthorizedNotification = @"APIRequestGot401No
             }
         }
         if (self.callback) {
-            self.callback(self, res, error);
+            self.callback(res, error);
         }
 //        if (error.code == NSURLErrorNotConnectedToInternet) { ... }
     }
+}
+
+
+#pragma mark - NSObject
+
+- (NSString *)description {
+    return self.url.absoluteString;
 }
 
 @end

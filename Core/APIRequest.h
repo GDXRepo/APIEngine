@@ -18,7 +18,7 @@ FOUNDATION_EXPORT NSString *const APIRequestGot401NotAuthorizedNotification;
 
 @class APIRequest;
 
-typedef void(^APIRequestCallback)(APIRequest *req, APIResponse *res, NSError *error);
+typedef void(^APIRequestCallback)(APIResponse *response, NSError *error);
 typedef void(^APIRequestProgressBlock)(float progress);
 
 typedef NS_ENUM(NSInteger, APISerializerType) {
@@ -31,9 +31,10 @@ typedef NS_ENUM(NSInteger, APISerializerType) {
     
 }
 
+@property (readonly, nonatomic) NSURL               *url;
+@property (readonly, nonatomic) APISerializerType   requestSerializerType;
 @property (readonly, nonatomic) Class               responseClass;
 @property (readonly, nonatomic) NSDictionary        *responseHeaders;
-@property (readonly, nonatomic) APISerializerType   requestSerializerType;
 @property (readonly, nonatomic) APISerializerType   responseSerializerType;
 @property (copy, nonatomic)     APIRequestCallback  callback;
 
