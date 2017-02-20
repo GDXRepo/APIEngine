@@ -164,7 +164,7 @@ NSString *const APIRequestGot401NotAuthorizedNotification = @"APIRequestGot401No
 
 - (void)processResponse:(NSURLResponse *)response responseObject:(id)responseObject error:(NSError *)error {
     // all is OK, no network errors
-    NSLog(@"[RESPONSE] HTTP 200 OK %@", responseObject);
+    NSLog(@"[RESPONSE] HTTP 200 OK %@\n%@", response.URL.absoluteString, responseObject);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     self.completed = YES;
     // read headers
@@ -191,7 +191,7 @@ NSString *const APIRequestGot401NotAuthorizedNotification = @"APIRequestGot401No
     self.completed = YES;
     // check for 401 Not Authorized error
     if (((NSHTTPURLResponse *)response).statusCode == 401) {
-        //                                 [[AppDelegate appDelegate] logoutOn401];
+        // [[AppDelegate appDelegate] logoutOn401];
         [[NSNotificationCenter defaultCenter]
          postNotificationName:APIRequestGot401NotAuthorizedNotification
          object:nil];
